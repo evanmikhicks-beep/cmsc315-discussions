@@ -21,7 +21,6 @@ the project is approached through the creation of Node and BST classes.
 
 ## Reflection
 
-
 1. ===Concepts and Skills===
 The primary skill earned in this assignment was the translation of Binary Search Tree concepts into appropriate
 methods. I had taken very detailed notes on the BST operations during class, and the real challenge in this
