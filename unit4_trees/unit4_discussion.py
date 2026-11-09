@@ -17,14 +17,16 @@ class Node:
         # TODO (Student):
         # Store the node's value and initialize references
         # to the left and right child nodes.
-        pass
+        self.value = value
+        self.left = None #Left and right nodes are initialized as None
+        self.right = None
 
 
 class BST:
     def __init__(self):
         # TODO (Student):
         # Initialize an empty Binary Search Tree.
-        pass
+        self.root = None #All that is needed to initialize an empty BST is a None root.
 
     def insert(self, value):
         """
@@ -37,7 +39,10 @@ class BST:
           whether a value is smaller or larger than the
           current node.
         """
-        pass
+        #Call the recursive helper method.
+        self.root = self._insert_recursive(self.root, value)
+
+
 
     def _insert_recursive(self, node, value):
         """
@@ -50,7 +55,19 @@ class BST:
         - Insert larger values into the right subtree.
         - Return the updated node reference.
         """
-        pass
+        if node is None: #Immediate placement of the node into the BST for an empty BST
+            return Node(value)
+
+        elif value < node.value: #Directs placement of the node to the left if < current node value
+            node.left = self._insert_recursive(node.left, value)
+
+        elif value > node.value: #Directs placement of the node to the right if > current node value
+            node.right = self._insert_recursive(node.right, value)
+
+        else: #For handling edge case that the value already is in the BST
+            print("This value already exists in the tree!")
+
+        return node
 
     def search(self, value):
         """
@@ -63,14 +80,23 @@ class BST:
         - Add comments explaining why BST search is often
           more efficient than linear search.
         """
-        pass
+        #Call the recursive helper method.
+        return self._search_recursive(self.root, value)
+
 
     def _search_recursive(self, node, value):
         """
         TODO (Student):
         Implement recursive BST search.
         """
-        pass
+        if (node is None): #Handles the edge case of an empty BST
+            return False
+        elif (value == node.value): #The actual detection of the value the user desired
+            return True
+        elif (value < node.value): #Directing the search to the left subtree if the value is < current node value
+            return self._search_recursive(node.left, value)
+        elif (value > node.value): #Directing the search to the right subtree if the value is > current node value
+            return self._search_recursive(node.right, value)
 
     def inorder(self):
         """
@@ -78,7 +104,10 @@ class BST:
         Return a list containing the values from an
         in-order traversal.
         """
-        pass
+        #Use an empty list to store ordered values, and call the recursive helper method.
+        ordered_values = []
+        self._inorder_recursive(self.root, ordered_values)
+        return ordered_values
 
     def _inorder_recursive(self, node, values):
         """
@@ -92,8 +121,11 @@ class BST:
         - Add comments explaining why this traversal
           produces sorted output in a BST.
         """
-        pass
-
+        if node: #In order to only execute if a node exists
+            self._inorder_recursive(node.left, values) #Traversing left subtree
+            values.append(node.value) #Appending the node value
+            self._inorder_recursive(node.right, values) #Traversing the right subtree
+        return
 
 def main():
     print("=== UNIT 4: BINARY SEARCH TREES ===")
@@ -111,7 +143,21 @@ def main():
     # 5. Use comments to explain why a BST is efficient at reducing search space for each step.
 
     print("\n=== TREE CONSTRUCTION ===")
-    print("TODO: Create a BST and insert multiple values.")
+
+    #Creating an empty BST
+    guestnumbers = BST()
+    #Preparing values to pass to the BST
+    pendingnumbers = [30, 12, 28, 41, 9, 55, 45, 16]
+
+    #Cycling through each pending number to add to our BST
+    for number in pendingnumbers:
+        guestnumbers.insert(number)
+
+    #Printing the values we inserted
+    print("Guest Numbers in insertion order:", pendingnumbers)
+    #A Binary Search Tree is efficient at reducing search time because the structure of the tree encodes
+    #additional relationships between the nodes for quicker access, which could not be seen encoded in
+    #a structure such as a linked list.
 
     # ===============================
     # TODO (Student): IN-ORDER TRAVERSAL
@@ -124,7 +170,12 @@ def main():
     #    sorted output in a BST.
 
     print("\n=== IN-ORDER TRAVERSAL ===")
-    print("TODO: Display and explain traversal results.")
+
+    #Calling the inorder() method arranges our tree values in order. This is because the recursive method
+    #first visits the left subtree, then the current node, and finally the right subtree. Manipulation of the
+    #order and direction of these visits would result in other types of traversals.
+    sorted_guests = guestnumbers.inorder()
+    print("Sorted guest numbers:", sorted_guests)
 
     # ===============================
     # TODO (Student): SEARCH TESTS
@@ -136,7 +187,11 @@ def main():
     # 3. Use comments to clearly explain the results.
 
     print("\n=== SEARCH TESTS ===")
-    print("TODO: Demonstrate BST searching.")
+
+    for number in [16, 45]: #Print the results of a search for 2 existing values.
+        print(f"Was the guest number {number} found?: {guestnumbers.search(number)}")
+    for number in [15, 22]: #Print the results of a search for 2 non-existing values.
+        print(f"Was the guest number {number} found?: {guestnumbers.search(number)}")
 
     # ===============================
     # TODO (Student): EDGE CASES
@@ -153,9 +208,17 @@ def main():
     # Use comments to explain what happens and why.
 
     print("\n=== EDGE CASES ===")
-    print("TODO: Demonstrate and explain an edge case.")
 
+    #Attempting  to insert a value that already exists in the tree. The insert recursive method will handle this
+    #by detecting that the number already exists and printing an appropriate response, without modifying the BST.
+    print("Inserting the number 30: ")
+    guestnumbers.insert(30)
 
+    #Searching an empty tree. The search method handles this by returning false immediately when it detects the
+    #absence of a root node.
+    emptyTree = BST() #Creation of an empty tree
+    print("Searching an empty tree for the number 5:")
+    print("Was the value found? :", emptyTree.search(5))
 
 if __name__ == "__main__":
     main()
